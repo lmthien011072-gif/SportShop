@@ -27,6 +27,14 @@
             <a asp-area="Admin" asp-controller="Catalog" asp-action="Sports" class="nav-link"><i class="fas fa-running me-2 text-center" style="width:20px;"></i> Môn thể thao</a>
             <a asp-area="Admin" asp-controller="User" asp-action="Index" class="nav-link"><i class="fas fa-users me-2 text-center" style="width:20px;"></i> Khách hàng</a>
         </div>
+
+        <div class="mt-auto border-top border-secondary p-3">
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                <button type="submit" class="btn btn-outline-danger w-100 text-start fw-bold" style="border: none;">
+                    <i class="fas fa-sign-out-alt me-2 text-center" style="width:20px;"></i> Đăng xuất
+                </button>
+            </form>
+        </div>
     </div>
 
     <!-- NỘI DUNG CHÍNH BÊN PHẢI -->

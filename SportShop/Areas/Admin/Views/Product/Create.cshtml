@@ -43,9 +43,11 @@
                         </div>
                     </div>
 
+                    <!-- ĐÃ THÊM DẤU * VÀ THUỘC TÍNH REQUIRED CHO MÔ TẢ -->
                     <div class="mb-3">
-                        <label asp-for="Description" class="form-label fw-bold">Mô tả sản phẩm</label>
-                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập mô tả chi tiết sản phẩm..."></textarea>
+                        <label asp-for="Description" class="form-label fw-bold">Mô tả sản phẩm <span class="text-danger">*</span></label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập mô tả chi tiết sản phẩm..." required></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
                     </div>
                 </div>
             </div>
@@ -59,10 +61,11 @@
                     </button>
                 </div>
                 <div class="card-body p-4" id="variants-container">
+                    <!-- ĐÃ THÊM DẤU * VÀO TIÊU ĐỀ CÁC CỘT -->
                     <div class="row fw-bold mb-2 text-muted px-2">
-                        <div class="col-4">Màu sắc</div>
-                        <div class="col-4">Kích thước (Size)</div>
-                        <div class="col-3">Số lượng tồn kho</div>
+                        <div class="col-4">Màu sắc <span class="text-danger">*</span></div>
+                        <div class="col-4">Kích thước (Size) <span class="text-danger">*</span></div>
+                        <div class="col-3">Số lượng tồn <span class="text-danger">*</span></div>
                         <div class="col-1"></div>
                     </div>
 
@@ -89,12 +92,18 @@
         <div class="col-md-4">
             <div class="card shadow-sm border-0 rounded-4 mb-4">
                 <div class="card-header bg-white py-3">
-                    <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-money-bill-wave me-2 text-success"></i>Giá bán</h6>
+                    <!-- ĐÃ THÊM DẤU * CHO GIÁ BÁN -->
+                    <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-money-bill-wave me-2 text-success"></i>Giá bán <span class="text-danger">*</span></h6>
                 </div>
                 <div class="card-body p-4">
                     <div class="mb-0">
                         <div class="input-group">
-                            <input asp-for="Price" type="number" class="form-control form-control-lg text-danger fw-bold" placeholder="0" min="0" required />
+                            <!-- Ô NÀY ĐỂ HIỂN THỊ (CÓ DẤU PHẨY) -->
+                            <input type="text" id="priceDisplay" class="form-control form-control-lg text-danger fw-bold" placeholder="0" required />
+
+                            <!-- Ô NÀY ĐỂ ẨN (LƯU SỐ NGUYÊN THỦY GỬI LÊN SERVER) -->
+                            <input type="hidden" asp-for="Price" />
+
                             <span class="input-group-text">VNĐ</span>
                         </div>
                         <span asp-validation-for="Price" class="text-danger small"></span>
@@ -115,6 +124,7 @@
 
                     <hr />
 
+                    <!-- KHÔNG THÊM DẤU * CHO GALLERY THEO YÊU CẦU -->
                     <div class="mb-3">
                         <label asp-for="GalleryFiles" class="form-label fw-bold">Bộ sưu tập ảnh (Gallery)</label>
                         <input asp-for="GalleryFiles" type="file" class="form-control" accept="image/*" multiple />
@@ -135,37 +145,6 @@
     <!-- Partial Scripts để bật Client-side Validation (Kiểm tra lỗi ở phía trình duyệt) -->
     <partial name="_ValidationScriptsPartial" />
 
-    <script>
-        // Biến đếm số lượng biến thể hiện tại (Bắt đầu từ 1 vì Index 0 đã có ở HTML)
-        let variantIndex = 1;
-
-        function addVariantRow() {
-            const container = document.getElementById('variants-container');
-
-            // Khởi tạo HTML cho dòng mới
-            const html = `
-                <div class="row mb-3 variant-row align-items-center bg-light p-2 rounded mx-0">
-                    <div class="col-4">
-                        <input type="text" name="Variants[${variantIndex}].Color" class="form-control" placeholder="VD: Đỏ, Xanh..." required />
-                    </div>
-                    <div class="col-4">
-                        <input type="text" name="Variants[${variantIndex}].Size" class="form-control" placeholder="VD: M, L, XL, 42..." required />
-                    </div>
-                    <div class="col-3">
-                        <input type="number" name="Variants[${variantIndex}].StockQuantity" class="form-control" placeholder="0" min="0" required />
-                    </div>
-                    <div class="col-1 text-end">
-                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeVariantRow(this)"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-            `;
-
-            container.insertAdjacentHTML('beforeend', html);
-            variantIndex++; // Tăng index cho lần thêm tiếp theo
-        }
-
-        function removeVariantRow(button) {
-            button.closest('.variant-row').remove();
-        }
-    </script>
+    <!-- Gọi Script xử lý riêng cho trang thêm sản phẩm -->
+    <script src="~/js/admin-product-create.js" asp-append-version="true"></script>
 }
