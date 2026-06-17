@@ -1,0 +1,83 @@
+﻿@model IEnumerable<SportShop.Areas.Admin.ViewModels.Catalog.CategoryAdminViewModel>
+@{
+    ViewData["Title"] = "Quản lý Danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-list me-2 text-success"></i>Danh sách Danh mục</h5>
+        <button type="button" class="btn btn-success btn-sm rounded-pill px-3" onclick="openCategoryModal(0, '')">
+            <i class="fas fa-plus me-1"></i> Thêm Danh mục
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4" style="width: 100px;">ID</th>
+                        <th>Tên Danh mục</th>
+                        <th class="text-end pe-4" style="width: 200px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 text-muted">#@item.Id</td>
+                            <td class="fw-bold">@item.Name</td>
+                            <td class="text-end pe-4 action-btns">
+                                <button class="btn btn-outline-primary btn-sm" onclick="openCategoryModal(@item.Id, '@item.Name')">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </button>
+                                <form asp-action="DeleteCategory" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirmDelete('Xóa danh mục @item.Name có thể ảnh hưởng đến sản phẩm. Tiếp tục?');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-trash-alt"></i> Xóa
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thêm/Sửa Danh mục -->
+<div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold" id="categoryModalTitle">Thêm Danh mục</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="SaveCategory" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="CategoryId" name="Id" value="0" />
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tên Danh mục <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="CategoryName" name="Name" required placeholder="Ví dụ: Áo thun, Quần đùi..." />
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save me-1"></i> Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openCategoryModal(id, name) {
+            document.getElementById('CategoryId').value = id;
+            document.getElementById('CategoryName').value = name;
+            document.getElementById('categoryModalTitle').innerText = id === 0 ? 'Thêm Danh mục mới' : 'Cập nhật Danh mục';
+            var myModal = new bootstrap.Modal(document.getElementById('categoryModal'));
+            myModal.show();
+        }
+    </script>
+}

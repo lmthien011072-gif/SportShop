@@ -1,0 +1,38 @@
+﻿/* =========================================================
+   CSS Riêng cho Trang Chủ (Home Index)
+   ========================================================= */
+
+/* Hiệu ứng gradient chạy lướt qua cho tiêu đề */
+.animated-gradient-text {
+    background: linear-gradient(to right, var(--primary-color) 20%, var(--accent-color) 40%, var(--accent-color) 60%, var(--primary-color) 80%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+/* Tùy chỉnh Slider Swiper */
+.featured-swiper {
+    padding-bottom: 50px !important; /* Chừa chỗ cho các dấu chấm */
+}
+
+.swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: #cbd5e1;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: var(--accent-color);
+    width: 24px;
+    border-radius: 5px; /* Biến dấu chấm active thành hình viên thuốc */
+}

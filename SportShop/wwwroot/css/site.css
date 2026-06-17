@@ -1,0 +1,404 @@
+﻿/* =========================================================
+   SPORTSHOP UNIFIED STYLESHEET - KIẾN TRÚC UI "MỀM MẠI"
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+/* =========================================================
+   1. BIẾN CỤC BỘ (VARIABLES) & BASE (CƠ BẢN)
+   ========================================================= */
+:root {
+    --primary-color: #1A265A; /* Xanh Navy - Header, Footer, Tiêu đề */
+    --primary-dark: #11183b; /* Xanh Navy tối hơn khi hover */
+    --accent-color: #F1600D; /* Cam năng động - Nút bấm, Giá tiền */
+    --accent-dark: #d6540b; /* Cam đậm hơn khi hover */
+    --secondary-color: #50A5B1; /* Xanh Teal - Label phụ, Badge */
+    --bg-light: #F8FAFC; /* Xám xanh cực nhạt - Nền web mềm hơn */
+    --bg-highlight: #FFF5F0; /* Màu cam sữa siêu nhạt - Nền khi Active/Hover */
+    --text-dark: #334155; /* Xám xanh đậm - Màu chữ chính thanh lịch hơn */
+    --border-color: #E2E8F0; /* Xám viền mượt mà */
+    /* Biến dùng chung cho hiệu ứng mềm mại */
+    --shadow-soft: 0 4px 12px rgba(0,0,0,0.03);
+    --shadow-hover: 0 10px 25px rgba(241, 96, 13, 0.12); /* Bóng cam lan tỏa */
+    --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+body {
+    background-color: var(--bg-light);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-dark);
+    line-height: 1.6; /* Tăng khoảng cách dòng cho dễ đọc */
+}
+
+/* Ẩn mũi tên lên xuống mặc định của input number */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Các Input Form dùng chung */
+.form-control, .form-select {
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 12px 16px;
+    transition: var(--transition-smooth);
+}
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 4px rgba(241, 96, 13, 0.1);
+    }
+
+/* =========================================================
+   2. TIỆN ÍCH DÙNG CHUNG (UTILITIES)
+   ========================================================= */
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.bg-primary-theme {
+    background-color: var(--primary-color) !important;
+    color: white;
+}
+
+.bg-accent {
+    background-color: var(--accent-color) !important;
+    color: white;
+}
+
+.bg-secondary-theme {
+    background-color: var(--secondary-color) !important;
+    color: white;
+}
+
+.hover-accent:hover {
+    color: var(--accent-color) !important;
+    transition: color 0.3s ease;
+}
+
+.view-all-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+    .view-all-link:hover {
+        color: var(--accent-dark);
+        transform: translateX(4px); /* Hiệu ứng trượt nhẹ thay vì gạch chân */
+        display: inline-block;
+    }
+
+/* =========================================================
+   3. COMPONENTS: NÚT BẤM (BUTTONS & CHIPS)
+   ========================================================= */
+.btn-sport {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+    border-radius: 50px; /* Bo tròn tuyệt đối thành viên thuốc */
+    padding: 10px 24px;
+    box-shadow: 0 4px 10px rgba(241, 96, 13, 0.2); /* Bóng cam nhẹ */
+    transition: var(--transition-smooth);
+}
+
+    .btn-sport:hover {
+        background-color: var(--accent-dark);
+        color: white;
+        box-shadow: 0 6px 15px rgba(241, 96, 13, 0.35); /* Bóng lan to hơn khi hover */
+        transform: translateY(-2px);
+    }
+
+/* Nút chọn Môn thể thao dạng Pill */
+.sport-pill-btn {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    padding: 8px 24px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+}
+
+    .sport-pill-btn:hover {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+        transform: translateY(-2px);
+    }
+
+    .sport-pill-btn.active {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: #fff;
+        box-shadow: 0 6px 12px rgba(241, 96, 13, 0.25);
+    }
+
+/* Nút Lọc và Sắp xếp cơ bản */
+.filter-btn, .sort-btn {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    color: var(--text-dark);
+    border-radius: 12px; /* Bo góc mềm hơn */
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+    .filter-btn:hover, .sort-btn.active {
+        border-color: var(--accent-color);
+        background-color: var(--bg-highlight);
+        color: var(--accent-color);
+        font-weight: 600;
+    }
+
+/* =========================================================
+   4. COMPONENTS: THẺ SẢN PHẨM & HIỂN THỊ HÃNG (CARDS)
+   ========================================================= */
+/* Thẻ sản phẩm bóng mờ */
+.card-product, .product-card-cps {
+    border: 1px solid transparent; /* Ẩn viền đi cho hiện đại */
+    border-radius: 16px; /* Bo góc to hơn */
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+    .card-product:hover, .product-card-cps:hover {
+        border-color: #fce7db; /* Viền cam siêu nhạt */
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-4px); /* Bay lên xíu */
+    }
+
+/* Nhãn dán giảm giá (Thiết kế lại theo dạng Ribbon bo góc) */
+.badge-discount {
+    position: absolute;
+    top: 12px;
+    left: -6px;
+    background: linear-gradient(135deg, var(--accent-color), #ff7a33);
+    color: white;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 6px 12px 12px 0; /* Bo góc lệch siêu mềm */
+    z-index: 10;
+    box-shadow: 2px 4px 8px rgba(241, 96, 13, 0.3);
+}
+
+    .badge-discount::before {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        border-top: 6px solid var(--accent-dark);
+        border-left: 6px solid transparent;
+    }
+
+/* Nút Chọn Thương Hiệu Có Logo */
+.brand-logo-btn, .brand-badge {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px; /* Bo góc bự */
+    padding: 10px 20px;
+    min-width: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+}
+
+    .brand-logo-btn:hover, .brand-badge:hover {
+        border-color: var(--accent-color);
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-3px);
+    }
+
+    .brand-logo-btn.active {
+        border-color: var(--accent-color);
+        background-color: var(--bg-highlight);
+        box-shadow: 0 4px 10px rgba(241, 96, 13, 0.1);
+    }
+
+    .brand-logo-btn img {
+        max-height: 28px;
+        object-fit: contain;
+    }
+
+/* =========================================================
+   5. COMPONENTS: BỐ CỤC CHUNG (LAYOUT / MENU)
+   ========================================================= */
+/* Tiêu đề Khối (Section Title) */
+.section-title {
+    border-bottom: 2px solid var(--border-color); /* Đổi viền cam gắt thành viền xám nhạt */
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+    .section-title h2 {
+        background-color: transparent; /* Bỏ nền xanh gắt */
+        color: var(--primary-color); /* Chữ màu Navy */
+        padding: 0 0 10px 0;
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 800; /* Font chữ dày, mạnh mẽ */
+        text-transform: uppercase;
+        border-radius: 0;
+        position: relative;
+    }
+
+        /* Thêm thanh gạch chân màu cam chạy dưới chữ */
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+        }
+
+/* Mega Menu */
+.mega-menu-wrapper {
+    position: relative;
+    z-index: 1000;
+}
+
+.mega-menu-left {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+.mega-menu-item {
+    position: static;
+    transition: background-color 0.3s ease;
+}
+
+    .mega-menu-item:hover {
+        background-color: #f1f5f9;
+    }
+
+        .mega-menu-item:hover > a {
+            color: var(--accent-color) !important;
+            font-weight: 600;
+        }
+
+.mega-menu-panel {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 700px;
+    min-height: 100%;
+    z-index: 1001;
+    border-left: 1px solid var(--border-color);
+    border-radius: 0 16px 16px 0;
+    box-shadow: 10px 10px 30px rgba(0,0,0,0.05);
+}
+
+.mega-menu-item:hover .mega-menu-panel {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* =========================================================
+   6. KIỂU DÁNG ĐẶC THÙ (SPECIFIC PAGES)
+   ========================================================= */
+
+/* --- 6.1 Trang Thanh Toán (Checkout) --- */
+.checkout-card {
+    border-radius: 16px; /* Bo góc mềm */
+    background-color: #ffffff;
+    border: none; /* Bỏ viền cứng */
+    box-shadow: var(--shadow-soft);
+}
+
+.address-item-box {
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    position: relative;
+    background-color: #fff;
+}
+
+    .address-item-box:hover {
+        border-color: #cbd5e1;
+        box-shadow: var(--shadow-soft);
+    }
+
+.address-radio-input:checked + .address-box-content .address-item-box {
+    border-color: var(--accent-color);
+    background-color: var(--bg-highlight);
+    box-shadow: 0 4px 15px rgba(241, 96, 13, 0.08);
+}
+
+.new-address-panel {
+    border-top: 1px dashed var(--border-color);
+    margin-top: 24px;
+    padding-top: 24px;
+}
+
+.order-summary-item {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 16px;
+}
+
+.order-summary-img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    background-color: var(--bg-light);
+    border: none;
+    border-radius: 10px;
+    padding: 6px;
+}
+
+.payment-method-card {
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 15px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    background-color: #fff;
+}
+
+    .payment-method-card:hover {
+        border-color: #cbd5e1;
+        transform: translateY(-2px);
+    }
+
+.payment-radio-input:checked + .payment-method-card {
+    border-color: var(--accent-color);
+    background-color: var(--bg-highlight);
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(241, 96, 13, 0.08);
+}

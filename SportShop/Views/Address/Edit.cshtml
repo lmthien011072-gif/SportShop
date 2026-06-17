@@ -1,0 +1,123 @@
+﻿@using SportShop.Entities.Shop
+@model UserAddress
+
+@{
+    ViewData["Title"] = "Chỉnh sửa địa chỉ";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <h4 class="fw-bold m-0 text-primary-theme text-uppercase">CẬP NHẬT ĐỊA CHỈ</h4>
+                        <a asp-action="Index" class="text-muted text-decoration-none hover-accent fw-bold"><i class="fas fa-arrow-left me-1"></i> Quay lại</a>
+                    </div>
+
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-bold"></div>
+
+                        <!-- Bắt buộc giữ lại ID và Trạng thái mặc định -->
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="IsDefault" />
+                        <!-- Bắt buộc có dòng này để load sẵn Province/Commune cũ vào JS -->
+                        <input type="hidden" id="currentProvince" value="@Model.Province" />
+                        <input type="hidden" id="currentCommune" value="@Model.Commune" />
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Tên người nhận <span class="text-danger">*</span></label>
+                                <input asp-for="ReceiverName" class="form-control form-control-lg" placeholder="Nhập họ và tên" />
+                                <span asp-validation-for="ReceiverName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Số điện thoại <span class="text-danger">*</span></label>
+                                <input asp-for="PhoneNumber" class="form-control form-control-lg" placeholder="VD: 0987654321" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Tỉnh / Thành phố <span class="text-danger">*</span></label>
+                                <select asp-for="Province" class="form-select form-select-lg" id="provinceSelect">
+                                    <option value="">-- Đang tải danh sách... --</option>
+                                </select>
+                                <span asp-validation-for="Province" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Quận/Huyện, Xã/Phường <span class="text-danger">*</span></label>
+                                <select asp-for="Commune" class="form-select form-select-lg" id="communeSelect">
+                                    <!-- Option này sẽ được ghi đè bằng JS, nhưng tạm thời bỏ tên cũ vào để không bị lỗi Validate lúc load trang -->
+                                    <option value="@Model.Commune">@Model.Commune</option>
+                                </select>
+                                <span asp-validation-for="Commune" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Địa chỉ chi tiết <span class="text-danger">*</span></label>
+                            <textarea asp-for="SpecificAddress" class="form-control form-control-lg" rows="3" placeholder="Số nhà, tên đường, ngõ hẻm..."></textarea>
+                            <span asp-validation-for="SpecificAddress" class="text-danger small"></span>
+                        </div>
+
+                        <div class="text-end border-top pt-4">
+                            <button type="submit" class="btn btn-sport btn-lg px-5 fw-bold rounded-pill shadow-sm btn-prevent-double">LƯU THAY ĐỔI</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <!-- Gọi API xử lý thả xuống Tỉnh/Xã DÙNG CHUNG -->
+    <script src="~/js/address-api.js" asp-append-version="true"></script>
+
+    <!-- Script bổ sung để tự động chọn lại Tỉnh/Xã cũ của khách hàng -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Đợi khoảng 1 giây để API tải xong danh sách Tỉnh từ address-api.js
+            setTimeout(function() {
+                var currentProvince = document.getElementById('currentProvince').value;
+                var provinceSelect = document.getElementById('provinceSelect');
+
+                if(currentProvince && provinceSelect) {
+                    // 1. Tìm và select Tỉnh cũ
+                    for (var i = 0; i < provinceSelect.options.length; i++) {
+                        if (provinceSelect.options[i].value === currentProvince) {
+                            provinceSelect.selectedIndex = i;
+
+                            // 2. Kích hoạt sự kiện 'change' để gọi API tải danh sách Xã
+                            var event = new Event('change');
+                            provinceSelect.dispatchEvent(event);
+                            break;
+                        }
+                    }
+
+                    // 3. Đợi tiếp API tải danh sách Xã xong thì select Xã cũ
+                    setTimeout(function() {
+                        var currentCommune = document.getElementById('currentCommune').value;
+                        var communeSelect = document.getElementById('communeSelect');
+
+                        if(currentCommune && communeSelect) {
+                            for (var j = 0; j < communeSelect.options.length; j++) {
+                                if (communeSelect.options[j].value === currentCommune) {
+                                    communeSelect.selectedIndex = j;
+                                    break;
+                                }
+                            }
+                        }
+                    }, 800); // Đợi 800ms cho call API Xã
+                }
+            }, 800); // Đợi 800ms cho call API Tỉnh
+        });
+    </script>
+}

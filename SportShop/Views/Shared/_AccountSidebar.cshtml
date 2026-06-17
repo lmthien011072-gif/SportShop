@@ -1,0 +1,22 @@
+﻿@{
+    // Lấy tên Controller và Action hiện tại trên thanh URL
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+<div class="list-group shadow-sm rounded-4 border-0 mb-4">
+    <a asp-controller="Profile" asp-action="Index"
+       class="list-group-item list-group-item-action py-3 @(currentController == "Profile" ? "active bg-accent border-0 fw-bold" : "")">
+        <i class="fas fa-user-circle me-2"></i> Thông tin tài khoản
+    </a>
+
+    <a asp-controller="Address" asp-action="Index"
+       class="list-group-item list-group-item-action py-3 @(currentController == "Address" ? "active bg-accent border-0 fw-bold" : "")">
+        <i class="fas fa-map-marker-alt me-2"></i> Sổ địa chỉ
+    </a>
+
+    <a asp-controller="Order" asp-action="History"
+       class="list-group-item list-group-item-action py-3 @(currentController == "Order" && (currentAction == "History" || currentAction == "Details") ? "active bg-accent border-0 fw-bold" : "")">
+        <i class="fas fa-box me-2"></i> Lịch sử mua hàng
+    </a>
+</div>

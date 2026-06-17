@@ -1,0 +1,72 @@
+﻿/* =========================================================
+   1. BỐ CỤC CHÍNH (LAYOUT)
+   ========================================================= */
+body {
+    display: flex;
+    background: #f8f9fa;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+#page-content-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+/* =========================================================
+   2. TÙY CHỈNH SIDEBAR
+   ========================================================= */
+.sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #2c3e50;
+    color: white;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.nav-link {
+    color: #bdc3c7;
+    padding: 15px 20px;
+    display: block;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+    .nav-link:hover, .nav-link.active {
+        background: #1a252f;
+        color: #ffffff;
+        border-left: 4px solid #3498db;
+    }
+
+/* =========================================================
+   3. CÁC COMPONENT KHÁC (CARDS, TABLES...)
+   ========================================================= */
+/* Các thẻ Card Dashboard */
+.card-stat {
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.bg-revenue {
+    background: #27ae60;
+}
+
+.bg-orders {
+    background: #2980b9;
+}
+
+.bg-users {
+    background: #8e44ad;
+}
+
+/* Table styling */
+.table thead {
+    background-color: #f4f6f9;
+}
+
+.action-btns .btn {
+    margin-right: 5px;
+}

@@ -1,0 +1,144 @@
+﻿@using SportShop.Helpers
+@using SportShop.Models
+@using SportShop.ViewModels
+@using Microsoft.AspNetCore.Identity
+@using SportShop.Entities.Shop
+
+@inject UserManager<User> UserManager
+
+@{
+    var cartSession = Context.Session.Get<ShoppingCart>("ShoppingCart");
+    int cartCount = cartSession != null ? cartSession.TotalItems : 0;
+
+    User currentUser = null;
+    if (User.Identity.IsAuthenticated)
+    {
+        currentUser = await UserManager.GetUserAsync(User);
+    }
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SportShop</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary-theme shadow-sm py-2">
+            <div class="container">
+                <a class="navbar-brand fw-bold fs-4" asp-controller="Home" asp-action="Index">
+                    <span class="text-accent">SPORT</span>SHOP
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-controller="Home" asp-action="Index">Trang Chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Sản Phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Khuyến Mãi</a>
+                        </li>
+                    </ul>
+
+                    <form class="d-flex me-3">
+                        <input class="form-control me-2 rounded-pill px-3" type="search" placeholder="Tìm giày, áo..." aria-label="Search">
+                        <button class="btn btn-outline-light rounded-pill px-3" type="submit">Tìm</button>
+                    </form>
+
+                    <a asp-controller="Cart" asp-action="Index" class="btn btn-sport me-4 position-relative rounded-pill px-3">
+                        <i class="fas fa-shopping-cart me-1"></i> Giỏ hàng
+                        @if (cartCount > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+                                @cartCount
+                            </span>
+                        }
+                    </a>
+
+                    <ul class="navbar-nav align-items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            string navAvatarSrc = !string.IsNullOrEmpty(currentUser?.AvatarUrl)
+                            ? currentUser.AvatarUrl
+                            : $"https://ui-avatars.com/api/?name={User.Identity.Name}&background=F1600D&color=fff&rounded=true&bold=true&font-size=0.4";
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link p-0 ms-2 d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <img src="@navAvatarSrc"
+                                         alt="User Avatar" class="rounded-circle shadow-sm" width="42" height="42" style="border: 2px solid #ffffff33; object-fit: cover;">
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-3 rounded-4 py-2" style="min-width: 240px; position: absolute;">
+                                    <li class="px-4 py-2 border-bottom mb-2 bg-light rounded-top-4" style="margin-top: -8px;">
+                                        <div class="text-muted small">Đăng nhập với tư cách:</div>
+                                        <div class="fw-bold text-dark text-truncate" style="max-width: 200px;" title="@User.Identity.Name">@User.Identity.Name</div>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item py-2 text-dark" asp-controller="Profile" asp-action="Index">
+                                            <i class="fas fa-user-circle text-muted me-2" style="width: 20px; text-align: center;"></i> Thông tin tài khoản
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item py-2 text-dark" asp-controller="Address" asp-action="Index">
+                                            <i class="fas fa-map-marker-alt text-muted me-2" style="width: 20px; text-align: center;"></i> Sổ địa chỉ
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item py-2 text-dark" asp-controller="Order" asp-action="History">
+                                            <i class="fas fa-shopping-bag text-muted me-2" style="width: 20px; text-align: center;"></i> Lịch sử mua hàng
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider my-2 opacity-25"></li>
+
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                            <button type="submit" class="dropdown-item py-2 text-danger fw-bold hover-accent">
+                                                <i class="fas fa-sign-out-alt me-2" style="width: 20px; text-align: center;"></i> Đăng xuất
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link fw-bold" asp-controller="Account" asp-action="Login">Đăng nhập</a></li>
+                            <li class="nav-item ms-2"><a class="btn btn-outline-light rounded-pill px-3" asp-controller="Account" asp-action="Register">Đăng ký</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-5 pt-4">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-primary-theme text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; @DateTime.Now.Year - SportShop. Tất cả các quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

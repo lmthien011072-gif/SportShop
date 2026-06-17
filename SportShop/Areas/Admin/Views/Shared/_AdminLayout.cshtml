@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Quản trị SportShop</title>
+
+    <!-- Thư viện Bootstrap 5 và FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- File CSS tùy chỉnh cho Admin (Đã thêm asp-append-version để chống lưu cache) -->
+    <link rel="stylesheet" href="~/css/admin-styles.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- SIDEBAR BÊN TRÁI -->
+    <div class="sidebar shadow-sm" id="sidebar-wrapper">
+        <div class="text-center py-4 text-white fs-4 fw-bold border-bottom border-secondary">
+            SPORT<span class="text-warning">SHOP</span>
+        </div>
+        <div class="list-group list-group-flush my-3">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav-link"><i class="fas fa-tachometer-alt me-2 text-center" style="width:20px;"></i> Dashboard</a>
+            <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="nav-link"><i class="fas fa-box me-2 text-center" style="width:20px;"></i> Sản phẩm</a>
+            <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="nav-link"><i class="fas fa-shopping-cart me-2 text-center" style="width:20px;"></i> Đơn hàng</a>
+            <a asp-area="Admin" asp-controller="Catalog" asp-action="Categories" class="nav-link"><i class="fas fa-list me-2 text-center" style="width:20px;"></i> Danh mục</a>
+            <a asp-area="Admin" asp-controller="Catalog" asp-action="Brands" class="nav-link"><i class="fas fa-copyright me-2 text-center" style="width:20px;"></i> Thương hiệu</a>
+            <a asp-area="Admin" asp-controller="Catalog" asp-action="Sports" class="nav-link"><i class="fas fa-running me-2 text-center" style="width:20px;"></i> Môn thể thao</a>
+            <a asp-area="Admin" asp-controller="User" asp-action="Index" class="nav-link"><i class="fas fa-users me-2 text-center" style="width:20px;"></i> Khách hàng</a>
+        </div>
+    </div>
+
+    <!-- NỘI DUNG CHÍNH BÊN PHẢI -->
+    <div id="page-content-wrapper">
+        <!-- TOPBAR (THANH ĐIỀU HƯỚNG TRÊN CÙNG) -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm px-4 py-3">
+            <div class="d-flex align-items-center">
+                <h5 class="m-0 text-dark fw-bold text-uppercase">@ViewData["Title"]</h5>
+            </div>
+            <div class="ms-auto d-flex align-items-center">
+                <span class="me-4 fw-bold text-secondary"><i class="fas fa-user-shield me-1"></i> Xin chào, Quản trị viên!</span>
+            </div>
+        </nav>
+
+        <!-- KHU VỰC RENDER VIEW -->
+        <div class="container-fluid p-4">
+
+            <!-- Hiển thị thông báo (Alerts) toàn cầu -->
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i> @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <!-- Nội dung các trang con sẽ được nhúng vào đây -->
+            @RenderBody()
+
+        </div>
+    </div>
+
+    <!-- Các thư viện Javascript -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- File Script tùy chỉnh cho Admin -->
+    <script src="~/js/admin-scripts.js" asp-append-version="true"></script>
+
+    <!-- Khu vực để nhúng Script riêng của từng trang -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

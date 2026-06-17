@@ -1,0 +1,60 @@
+﻿/* =========================================================
+   CSS trang Chi tiết sản phẩm
+   ========================================================= */
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Đường viền cho ảnh thumbnail khi được chọn */
+.border-accent {
+    border-color: var(--accent-color) !important;
+    border-width: 2px;
+}
+
+/* =========================================================
+   STYLE CHO NÚT CHỌN BIẾN THỂ
+   ========================================================= */
+.variant-btn {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color); /* Kế thừa biến màu từ site.css */
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 500;
+    color: var(--text-dark); /* Kế thừa biến màu từ site.css */
+    transition: all 0.2s ease-in-out;
+    min-width: 60px;
+}
+
+    /* Hiệu ứng khi lướt chuột qua (Chỉ áp dụng nếu nút không bị disable) */
+    .variant-btn:hover:not(.disabled-variant) {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+    }
+
+    /* Hiệu ứng khi Nút đang được chọn */
+    .variant-btn.active {
+        border-color: var(--accent-color);
+        background-color: var(--bg-highlight); /* Sử dụng nền cam sữa toàn cục */
+        color: var(--accent-color);
+        font-weight: 600;
+        position: relative;
+    }
+
+        /* Tạo dấu Tick (✓) nhỏ ở góc phải dưới khi nút được active */
+        .variant-btn.active::after {
+            content: "✓";
+            position: absolute;
+            bottom: -2px;
+            right: 4px;
+            font-size: 10px;
+            color: var(--accent-color);
+        }
+
+    /* Style cho các Size/Màu đã hết hàng */
+    .variant-btn.disabled-variant {
+        opacity: 0.4;
+        text-decoration: line-through;
+        cursor: not-allowed;
+        background-color: #f3f4f6;
+    }

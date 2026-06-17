@@ -1,0 +1,99 @@
+﻿@using SportShop.ViewModels.Order
+@model List<OrderHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Lịch sử mua hàng";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <!-- Sidebar Menu -->
+        <div class="col-md-3 mb-4">
+            <partial name="_AccountSidebar" />
+        </div>
+
+        <!-- Nội dung chính -->
+        <div class="col-md-9">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="fw-bold m-0 text-primary-theme text-uppercase">ĐƠN HÀNG CỦA TÔI</h4>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary btn-sm rounded-pill px-3"><i class="fas fa-shopping-cart me-1"></i> Mua sắm tiếp</a>
+                    </div>
+
+                    <!-- UX Tốt: Hiển thị trống nếu không có đơn -->
+                    @if (!Model.Any())
+                    {
+                        <div class="alert alert-light text-center py-5 rounded-4 shadow-sm border mt-3">
+                            <img src="/images/empty-order.png" alt="Trống" style="height: 120px; opacity: 0.6;" onerror="this.style.display='none';">
+                            <div class="fs-1 mb-3" style="@(TempData["HideIcon"] != null ? "display:none;" : "")">📦</div>
+                            <h5 class="fw-bold text-dark mt-3">Bạn chưa có đơn hàng nào!</h5>
+                            <p class="text-muted">Cùng khám phá hàng ngàn sản phẩm thể thao chính hãng ngay nhé.</p>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-sport px-4 rounded-pill mt-2">Đến cửa hàng</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle border rounded">
+                                <thead class="bg-light text-secondary small text-uppercase">
+                                    <tr>
+                                        <th class="py-3 px-3">Mã Đơn</th>
+                                        <th class="py-3">Loại Đơn</th>
+                                        <th class="py-3">Ngày Đặt</th>
+                                        <th class="py-3">Tổng Tiền</th>
+                                        <th class="py-3 text-center">Thanh Toán</th>
+                                        <th class="py-3 text-center">Trạng Thái</th>
+                                        <th class="py-3 text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model)
+                                    {
+                                        <tr>
+                                            <td class="px-3 fw-bold text-dark">#@order.Id</td>
+                                            <td>
+                                                @if (order.IsCustomized)
+                                                {
+                                                    <span class="badge bg-warning text-dark"><i class="fas fa-cut me-1"></i> Gia công</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-light text-dark border">Thường</span>
+                                                }
+                                            </td>
+                                            <td class="text-muted small">@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+
+                                            <td>
+                                                <div class="fw-bold text-danger">@order.TotalAmount.ToString("N0") ₫</div>
+                                                @if (order.AdvancePaymentAmount > 0 && order.AdvancePaymentAmount < order.TotalAmount)
+                                                {
+                                                    <div class="small text-muted">Cọc: @order.AdvancePaymentAmount.ToString("N0") ₫</div>
+                                                }
+                                            </td>
+
+                                            <td class="text-center">
+                                                <!-- UX Cực Xịn: Dùng class sinh từ ViewModel -->
+                                                <span class="badge @order.PaymentStatusBadgeClass px-2 py-1">@order.PaymentStatusName</span>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <span class="badge @order.OrderStatusBadgeClass px-2 py-1">@order.OrderStatusName</span>
+                                            </td>
+
+                                            <td class="text-center pe-2">
+                                                <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                    Chi tiết
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

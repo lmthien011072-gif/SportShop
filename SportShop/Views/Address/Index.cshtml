@@ -1,0 +1,102 @@
+﻿@using SportShop.Entities.Shop
+@model List<UserAddress>
+
+@{
+    ViewData["Title"] = "Sổ địa chỉ";
+}
+
+<!-- Nhúng CSS cục bộ -->
+<link rel="stylesheet" href="~/css/address.css" asp-append-version="true" />
+
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <!-- Sidebar Menu -->
+        <div class="col-md-3 mb-4">
+            <partial name="_AccountSidebar" />
+        </div>
+
+        <div class="col-md-9">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <h4 class="fw-bold m-0 text-primary-theme text-uppercase">SỔ ĐỊA CHỈ</h4>
+                        <a asp-action="Create" class="btn btn-sport rounded-pill px-4 fw-bold">
+                            <i class="fas fa-plus me-1"></i> Thêm địa chỉ mới
+                        </a>
+                    </div>
+
+                    @if (!Model.Any())
+                    {
+                        <div class="alert alert-light text-center py-5 border rounded-3">
+                            <h5 class="text-muted fw-bold">Bạn chưa lưu địa chỉ nào.</h5>
+                            <p class="text-muted mb-0">Thêm địa chỉ ngay để thanh toán nhanh chóng hơn!</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="address-list">
+                            @foreach (var addr in Model.OrderByDescending(a => a.IsDefault))
+                            {
+                                <div class="address-card p-4 mb-3 @(addr.IsDefault ? "is-default" : "") position-relative">
+                                    <div class="row">
+                                        <!-- Khối Thông Tin Bên Trái -->
+                                        <div class="col-md-8 col-sm-12 border-md-end">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <h6 class="fw-bold m-0 text-dark fs-5">@addr.ReceiverName</h6>
+                                                <span class="text-muted mx-2">|</span>
+                                                <span class="text-secondary fw-bold">@addr.PhoneNumber</span>
+                                            </div>
+                                            <p class="text-muted mb-1">@addr.SpecificAddress</p>
+                                            <p class="text-muted mb-0">@addr.Commune, @addr.Province</p>
+                                        </div>
+
+                                        <!-- Khối Thao Tác Bên Phải -->
+                                        <div class="col-md-4 col-sm-12 mt-3 mt-md-0 d-flex flex-column justify-content-between align-items-md-end">
+                                            <!-- Nhãn Mặc Định (Chỉ hiện nếu là địa chỉ mặc định) -->
+                                            <div class="text-end mb-3">
+                                                @if (addr.IsDefault)
+                                                {
+                                                    <span class="badge-default"><i class="fas fa-check-circle me-1"></i> Mặc định</span>
+                                                }
+                                            </div>
+
+                                            <!-- Các nút hành động nằm ngang -->
+                                            <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                                                @if (!addr.IsDefault)
+                                                {
+                                                    <!-- Nút Thiết lập mặc định (Dùng form ẩn thay vì thẻ a để chống CSRF) -->
+                                                    <form asp-action="SetDefault" method="post" class="m-0">
+                                                        <input type="hidden" name="id" value="@addr.Id" />
+                                                        <button type="submit" class="address-action-btn btn-set-default btn-prevent-double">
+                                                            Thiết lập mặc định
+                                                        </button>
+                                                    </form>
+                                                }
+
+                                                <!-- Nút Sửa -->
+                                                <a asp-action="Edit" asp-route-id="@addr.Id" class="address-action-btn btn-action-outline">Sửa</a>
+
+                                                <!-- Nút Xóa (Không cho xóa địa chỉ mặc định) -->
+                                                @if (!addr.IsDefault)
+                                                {
+                                                    <form asp-action="Delete" method="post" class="m-0">
+                                                        <input type="hidden" name="id" value="@addr.Id" />
+                                                        <button type="submit" class="address-action-btn btn-action-outline text-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa địa chỉ này?');">
+                                                            Xóa
+                                                        </button>
+                                                    </form>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

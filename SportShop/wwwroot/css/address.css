@@ -1,0 +1,66 @@
+﻿/* =========================================================
+   CSS CỤC BỘ - Dành riêng cho trang Sổ Địa Chỉ
+   ========================================================= */
+
+.address-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    background-color: #fff;
+}
+
+    /* Hiệu ứng viền đỏ và nền nhạt cho thẻ địa chỉ Mặc định */
+    .address-card.is-default {
+        border-color: var(--accent-color);
+        background-color: #fffaf7; /* Cam rất nhạt */
+    }
+
+    /* Hiệu ứng lướt chuột cho thẻ thường */
+    .address-card:not(.is-default):hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+/* Chỉnh lại các nút thao tác cho thanh lịch hơn */
+.address-action-btn {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+/* Nút "Sửa", "Xóa" */
+.btn-action-outline {
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    background-color: #fff;
+}
+
+    .btn-action-outline:hover {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+    }
+
+/* Nút "Thiết lập mặc định" (Làm cho nó chìm xuống để không bị gắt) */
+.btn-set-default {
+    color: #64748b;
+    border: 1px solid transparent;
+    background: transparent;
+}
+
+    .btn-set-default:hover {
+        color: var(--text-dark);
+        text-decoration: underline;
+    }
+
+/* Label Mặc định góc phải */
+.badge-default {
+    background-color: var(--accent-color);
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 4px;
+}

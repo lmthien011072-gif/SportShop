@@ -1,0 +1,58 @@
+﻿@using SportShop.ViewModels.Menu
+@model List<MegaMenuItemViewModel>
+
+<div class="mega-menu-wrapper position-relative">
+    <ul class="list-group mega-menu-left border-0 bg-white shadow-sm rounded-4">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item border-0 py-3 px-4 mega-menu-item position-static" style="border-bottom: 1px solid #f8f9fa !important;">
+
+                <!-- Gọi CatalogController -> Index với categoryId -->
+                <a asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@item.CategoryId" class="text-decoration-none text-dark d-block fw-bold fs-6">
+                    <span class="me-3 fs-5" style="width: 24px; display: inline-block; text-align: center;">@item.IconClass</span>
+                    @item.CategoryName
+                    <i class="fas fa-chevron-right float-end text-muted mt-1" style="font-size: 0.8rem;"></i>
+                </a>
+
+                <div class="mega-menu-panel bg-white p-4 p-lg-5 shadow-sm rounded-end-4 border-top border-bottom border-end border-light">
+                    <div class="row h-100">
+                        <div class="col-md-4 border-end border-light pe-4">
+                            <h6 class="text-muted fw-bold mb-4 text-uppercase" style="letter-spacing: 0.5px;">THEO MÔN THỂ THAO</h6>
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var sport in item.RelatedSports)
+                                {
+                                    <li class="mb-3">
+                                        <!-- Gọi CatalogController và truyền cả 2 ID -->
+                                        <a asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@item.CategoryId" asp-route-sportId="@sport.SportId" class="text-decoration-none text-dark hover-accent d-block fw-medium">
+                                            @sport.SportName
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="col-md-8 ps-lg-5 ps-4">
+                            <h6 class="text-muted fw-bold mb-4 text-uppercase" style="letter-spacing: 0.5px;">THƯƠNG HIỆU NỔI BẬT</h6>
+                            <div class="d-flex flex-wrap gap-3">
+                                @foreach (var brand in item.RelatedBrands)
+                                {
+                                    <!-- Gọi CatalogController và truyền cả 2 ID -->
+                                    <a asp-controller="Catalog" asp-action="Index" asp-route-categoryId="@item.CategoryId" asp-route-brandId="@brand.BrandId" class="brand-logo-btn">
+                                        @if (!string.IsNullOrEmpty(brand.LogoUrl))
+                                        {
+                                            <img src="@brand.LogoUrl" alt="@brand.BrandName" />
+                                        }
+                                        else
+                                        {
+                                            <span class="fw-bold text-dark text-uppercase px-2" style="font-size: 0.85rem;">@brand.BrandName</span>
+                                        }
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

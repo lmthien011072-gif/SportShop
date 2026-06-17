@@ -1,0 +1,101 @@
+﻿@model IEnumerable<SportShop.Areas.Admin.ViewModels.Catalog.BrandAdminViewModel>
+@{
+    ViewData["Title"] = "Quản lý Thương hiệu";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-copyright me-2 text-primary"></i>Danh sách Thương hiệu</h5>
+        <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" onclick="openBrandModal(0, '')">
+            <i class="fas fa-plus me-1"></i> Thêm Thương hiệu
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Logo</th>
+                        <th>Tên Thương hiệu</th>
+                        <th class="text-end pe-4">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">#@item.Id</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.LogoUrl))
+                                {
+                                    <img src="@item.LogoUrl" alt="@item.Name" class="rounded" style="height: 40px; width: auto; object-fit: contain; background: #f8f9fa; padding: 2px;" />
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Chưa có logo</span>
+                                }
+                            </td>
+                            <td class="fw-bold">@item.Name</td>
+                            <td class="text-end pe-4 action-btns">
+                                <button class="btn btn-outline-primary btn-sm" onclick="openBrandModal(@item.Id, '@item.Name')">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </button>
+                                <form asp-action="DeleteBrand" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirmDelete('Bạn có chắc chắn muốn xóa thương hiệu @item.Name?');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-trash-alt"></i> Xóa
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thêm/Sửa Thương hiệu -->
+<div class="modal fade" id="brandModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold" id="brandModalTitle">Thêm Thương hiệu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="SaveBrand" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" id="BrandId" name="Id" value="0" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tên Thương hiệu <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="BrandName" name="Name" required placeholder="Nhập tên thương hiệu..." />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tải lên Logo mới</label>
+                        <input type="file" class="form-control" name="LogoFile" accept="image/*" />
+                        <small class="text-muted">Bỏ trống nếu không muốn thay đổi logo hiện tại (khi sửa).</small>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openBrandModal(id, name) {
+            document.getElementById('BrandId').value = id;
+            document.getElementById('BrandName').value = name;
+            document.getElementById('brandModalTitle').innerText = id === 0 ? 'Thêm Thương hiệu mới' : 'Cập nhật Thương hiệu';
+            var myModal = new bootstrap.Modal(document.getElementById('brandModal'));
+            myModal.show();
+        }
+    </script>
+}

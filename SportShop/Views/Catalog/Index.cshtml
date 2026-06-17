@@ -1,0 +1,171 @@
+﻿@model SportShop.ViewModels.Catalog.CatalogViewModel
+
+@{
+    // Xây dựng Tiêu đề Động
+    string pageTitle = "Sản phẩm chính hãng";
+    if (!string.IsNullOrEmpty(Model.ActiveCategoryName)) pageTitle = Model.ActiveCategoryName;
+    if (!string.IsNullOrEmpty(Model.ActiveSportName)) pageTitle += $" {Model.ActiveSportName}";
+    if (!string.IsNullOrEmpty(Model.ActiveBrandName)) pageTitle += $" {Model.ActiveBrandName}";
+
+    ViewData["Title"] = pageTitle;
+}
+
+<link rel="stylesheet" href="~/css/brand-details.css" asp-append-version="true" />
+
+<div class="container mt-4 mb-5">
+
+    <!-- 1. BREADCRUMB ĐỘNG -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark"><i class="fas fa-home text-accent"></i> Trang chủ</a></li>
+            <li class="breadcrumb-item">
+                <a asp-controller="Catalog" asp-action="Index" asp-route-categoryId="" asp-route-sportId="" asp-route-brandId="" class="text-decoration-none text-dark fw-bold">Tất cả sản phẩm</a>
+            </li>
+            @if (!string.IsNullOrEmpty(Model.ActiveCategoryName))
+            {
+                <li class="breadcrumb-item active text-dark fw-bold">@Model.ActiveCategoryName</li>
+            }
+            @if (!string.IsNullOrEmpty(Model.ActiveSportName))
+            {
+                <li class="breadcrumb-item active text-dark fw-bold">@Model.ActiveSportName</li>
+            }
+            @if (!string.IsNullOrEmpty(Model.ActiveBrandName))
+            {
+                <li class="breadcrumb-item active text-dark fw-bold">@Model.ActiveBrandName</li>
+            }
+        </ol>
+    </nav>
+
+    <!-- 2. BANNER ĐỘNG THÔNG MINH -->
+    @if (Model.ActiveBrandId.HasValue && !Model.ActiveCategoryId.HasValue && !Model.ActiveSportId.HasValue)
+    {
+        // Ưu tiên hiển thị UI Gian Hàng nếu khách chỉ click vào Brand (từ trang chủ chẳng hạn)
+        <div class="brand-hero-section d-flex flex-column flex-md-row align-items-center gap-4">
+            <div class="brand-logo-box flex-shrink-0">
+                @if (!string.IsNullOrEmpty(Model.ActiveBrandLogoUrl))
+                {
+                    <img src="@Model.ActiveBrandLogoUrl" alt="Logo @Model.ActiveBrandName" />
+                }
+                else
+                {
+                    <h2 class="text-dark fw-bold m-0 text-center">@Model.ActiveBrandName</h2>
+                }
+            </div>
+            <div class="text-center text-md-start">
+                <div class="brand-badge-premium mb-2"><i class="fas fa-check-circle me-1"></i> Gian hàng chính hãng</div>
+                <h1 class="fw-bold mb-2 display-5 text-white">@Model.ActiveBrandName</h1>
+                <p class="mb-0 text-light opacity-75 fs-6" style="max-width: 650px;">Khám phá bộ sưu tập sản phẩm thể thao chất lượng cao cấp đến từ <strong>@Model.ActiveBrandName</strong>.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        // Banner chung cho các trường hợp Lọc đa chiều
+        <div class="brand-hero-section mb-4 text-center p-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 30px !important;">
+            <h1 class="fw-bold display-5 m-0">Ưu Đãi @pageTitle</h1>
+        </div>
+    }
+
+    <!-- 3. BỘ LỌC ĐA CHIỀU (TOGGLE) -->
+    <!-- Lọc Category -->
+    @if (Model.AvailableCategories.Count > 1 || Model.ActiveCategoryId.HasValue)
+    {
+        <div class="mb-4 pb-3 border-bottom">
+            <h6 class="fw-bold text-dark text-uppercase mb-3"><i class="fas fa-list text-accent me-1"></i> Danh mục sản phẩm</h6>
+            <div class="d-flex flex-wrap gap-2">
+                @foreach (var cat in Model.AvailableCategories)
+                {
+                    bool isActive = Model.ActiveCategoryId == cat.CategoryId;
+                    <!-- Nếu đang Active, click vào sẽ trả về NULL (Hủy lọc) -->
+                    <a asp-controller="Catalog" asp-action="Index"
+                       asp-route-categoryId="@(isActive ? "" : cat.CategoryId)"
+                       asp-route-sportId="@Model.ActiveSportId"
+                       asp-route-brandId="@Model.ActiveBrandId"
+                       class="sport-pill-btn @(isActive ? "active" : "")">
+                        @cat.CategoryName @(isActive ? " ✖" : "")
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Lọc Môn Thể Thao -->
+    @if (Model.AvailableSports.Count > 1 || Model.ActiveSportId.HasValue)
+    {
+        <div class="mb-4 pb-3 border-bottom">
+            <h6 class="fw-bold text-dark text-uppercase mb-3"><i class="fas fa-running text-accent me-1"></i> Chọn theo Môn Thể Thao</h6>
+            <div class="d-flex flex-wrap gap-2">
+                @foreach (var sport in Model.AvailableSports)
+                {
+                    bool isActive = Model.ActiveSportId == sport.SportId;
+                    <a asp-controller="Catalog" asp-action="Index"
+                       asp-route-categoryId="@Model.ActiveCategoryId"
+                       asp-route-sportId="@(isActive ? "" : sport.SportId)"
+                       asp-route-brandId="@Model.ActiveBrandId"
+                       class="sport-pill-btn @(isActive ? "active" : "")">
+                        @sport.SportName @(isActive ? " ✖" : "")
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Lọc Thương Hiệu -->
+    @if (Model.AvailableBrands.Count > 1 || Model.ActiveBrandId.HasValue)
+    {
+        <div class="mb-4 pb-3 border-bottom">
+            <h6 class="fw-bold text-dark text-uppercase mb-3"><i class="fas fa-tags text-accent me-1"></i> Thương Hiệu Nổi Bật</h6>
+            <div class="d-flex flex-wrap gap-3">
+                @foreach (var brand in Model.AvailableBrands)
+                {
+                    bool isActive = Model.ActiveBrandId == brand.BrandId;
+                    <a asp-controller="Catalog" asp-action="Index"
+                       asp-route-categoryId="@Model.ActiveCategoryId"
+                       asp-route-sportId="@Model.ActiveSportId"
+                       asp-route-brandId="@(isActive ? "" : brand.BrandId)"
+                       class="brand-logo-btn @(isActive ? "active" : "")">
+                        @if (!string.IsNullOrEmpty(brand.LogoUrl))
+                        {
+                            <img src="@brand.LogoUrl" alt="@brand.BrandName" />
+                        }
+                        else
+                        {
+                            <span class="fw-bold text-dark text-uppercase px-2" style="font-size: 0.85rem;">@brand.BrandName</span>
+                        }
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- 4. DANH SÁCH SẢN PHẨM -->
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 mt-2">
+        @if (Model.Products.Any())
+        {
+            @foreach (var item in Model.Products)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 product-card-cps position-relative">
+                        <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                            <img src="@item.ThumbnailUrl" class="card-img-top p-3 rounded-top-4 bg-white" alt="@item.Name" style="height: 200px; object-fit: contain;">
+                        </a>
+                        <div class="card-body d-flex flex-column text-center">
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none text-dark">
+                                <h6 class="card-title fw-bold text-truncate-2" style="font-size: 0.9rem;">@item.Name</h6>
+                            </a>
+                            <p class="card-text text-accent fw-bold mt-auto fs-5 mb-0">@item.Price.ToString("N0") ₫</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5 w-100">
+                <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</h5>
+                <a asp-controller="Catalog" asp-action="Index" class="btn btn-outline-secondary mt-3 rounded-pill px-4">Xóa tất cả bộ lọc</a>
+            </div>
+        }
+    </div>
+</div>
